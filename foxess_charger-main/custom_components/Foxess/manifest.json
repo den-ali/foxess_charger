@@ -1,0 +1,14 @@
+{
+  "domain": "foxess",
+  "name": "FoxESS EV Charger",
+  "version": "2.1.0-beta.1",
+  "config_flow": true,
+  "documentation": "https://github.com/den-ali/foxess_charger",
+  "issue_tracker": "https://github.com/den-ali/foxess_charger/issues",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": [
+    "@den-ali"
+  ],
+  "iot_class": "local_polling"
+}
