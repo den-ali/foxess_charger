@@ -3,7 +3,7 @@
 ![HACS](https://img.shields.io/badge/HACS-Compatible-orange)
 ![Python](https://img.shields.io/badge/Python-3.13-blue)
 
-# FoxESS Charger for Home Assistant
+# FoxESS Charger for Home Assistant via Modbus TCP.
 
 This project is based on the excellent work of
 **ringaction/foxess_charger**.
