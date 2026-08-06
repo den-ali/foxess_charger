@@ -1,103 +1,39 @@
-![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.8-blue)
-![Firmware](https://img.shields.io/badge/Firmware-1.6-green)
-![HACS](https://img.shields.io/badge/HACS-Compatible-orange)
-![Python](https://img.shields.io/badge/Python-3.13-blue)
+# FoxESS EV Charger for Home Assistant
 
-# FoxESS Charger for Home Assistant
+Custom Home Assistant integration for FoxESS A-series EV chargers over local Modbus TCP, including firmware 1.6 compatibility.
 
-A custom Home Assistant integration for the FoxESS EV Charger using Modbus TCP.
+## Highlights
 
-This project is an actively maintained fork of ringaction/foxess_charger.
+- Local polling; no cloud required.
+- Status, voltage, current, power, energy, temperatures, alarms, and faults.
+- Work mode, current/power limits, locking, charging control, and automatic phase switching.
+- Firmware 1.6 protocol handling:
+  - FC16 (`0x10`) for readable/writable registers.
+  - FC06 (`0x06`) for write-only command registers.
+  - Individual reads for configuration registers that reject a block read.
+- Model, serial number, and firmware in Home Assistant Device Info.
+- Redacted diagnostics download.
+- HACS-compatible repository structure.
 
-Original project copyright belongs to its respective author(s).
+## Install through HACS as a custom repository
 
-This fork adds full support for **FoxESS Firmware 1.6** and is designed to be fully compatible with the latest Home Assistant releases.
+1. Open HACS.
+2. Open the menu and choose **Custom repositories**.
+3. Add `https://github.com/den-ali/foxess_charger` as category **Integration**.
+4. Install **FoxESS EV Charger**.
+5. Restart Home Assistant.
+6. Add the integration through **Settings → Devices & services → Add integration**.
 
----
+For a GitHub release, copy the contents of this package to the repository root, commit it, and create a full GitHub release with the same version as `manifest.json`.
 
-## ✨ Features
+## Connection defaults
 
-- ✅ FoxESS Firmware 1.6 Support
-- ✅ Home Assistant 2026.8+
-- ✅ HACS Compatible
-- ✅ Modbus TCP Communication
-- ✅ Read Charger Status
-- ✅ Change Work Mode
-- ✅ Change Maximum Charging Current
-- ✅ Start / Stop Charging
-- ✅ Auto Phase Switching
-- ✅ Device Information (Model, Firmware, Serial Number)
-- ✅ Diagnostics Support
+- Modbus TCP unit ID: `1`
+- Integration default port: `1502`
+- FoxESS protocol documentation default port: `502`
 
----
+Use the port exposed by your charger. Existing working installations should keep their current port.
 
-## 🚧 Roadmap
+## Firmware 1.6 status
 
-### v2.1.0
-- Firmware 1.6 support
-- Device information
-- Improved Modbus communication
-
-### v2.2.0 (Planned)
-- ☀️ Smart Solar Charging
-
----
-
-## 📦 Installation
-
-### HACS
-
-1. Open HACS
-2. Integrations
-3. Custom repositories
-4. Add your GitHub repository
-5. Select **Integration**
-6. Install
-7. Restart Home Assistant
-
----
-
-## ⚙️ Requirements
-
-- Home Assistant 2026.8 or newer
-- FoxESS EV Charger
-- Modbus TCP enabled
-- Firmware 1.6 or newer
-
----
-
-## 🔧 Tested Hardware
-
-| Device | Status |
-|---------|--------|
-| FoxESS A011KS1 | ✅ Tested |
-| Firmware 1.6 | ✅ Tested |
-| Home Assistant 2026.8 | ✅ Tested |
-
----
-
-## 🤝 Credits
-
-This project is based on the excellent work of
-**ringaction/foxess_charger**.
-
-This fork extends the original integration with:
-
-- Firmware 1.6 compatibility
-- Improved Modbus communication
-- Device information
-- Future Smart Charging support
-
----
-
-## ❤️ Contributors
-
-Special thanks to everyone testing the integration on real hardware.
-
-Community testing is always welcome!
-
----
-
-## 📜 License
-
-This project follows the same license as the original project.
+Reading and writing configuration values has been tested on a FoxESS A-series 22 kW charger after firmware 1.6. Charging start/stop and live charging transitions still require testing with a vehicle connected.
