@@ -49,7 +49,7 @@ This fork adds full support for **FoxESS Firmware 1.6** and is designed to be fu
 1. Open HACS
 2. Integrations
 3. Custom repositories
-4. Add your GitHub repository
+4. Add this link: https://github.com/den-ali/foxess_charger
 5. Select **Integration**
 6. Install
 7. Restart Home Assistant
