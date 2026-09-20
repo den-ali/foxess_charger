@@ -130,26 +130,28 @@ class FoxESSChargerCoordinator(DataUpdateCoordinator):
             if val is not None:
                 data[key] = val
 
-        # Read protocol 1.6 R/W registers individually. Some firmware builds
-        # reject a single block read spanning the 0x3008 UINT32 value and the
-        # following address gap, returning exception 0x02 at 0x3000.
-        config_registers = {
-            "work_mode": 0x3000,
-            "max_charging_current_raw": 0x3001,
-            "max_charging_power_raw": 0x3002,
-            "allowed_charge_time": 0x3003,
-            "allowed_charge_energy": 0x3004,
-            "time_validity": 0x3005,
-            "default_current_raw": 0x3006,
-            "auto_phase_switch": 0x300A,
-            "min_switch_interval": 0x300B,
-        }
-        for key, address in config_registers.items():
-            value = self.client.read_register(address)
-            if value is not None:
-                data[key] = value
-            else:
-                _LOGGER.debug("Register 0x%04X (%s) is unavailable", address, key)
+        # ── 0x3000–0x3006: R/W Config registers ─────────────────────────────
+        # Firmware 1.07+ rejects a block read across the reserved
+        # 0x3007–0x3009 range, so read the two valid ranges separately.
+        cfg1 = self.client.read_registers(0x3000, 7)
+        if cfg1 and len(cfg1) >= 7:
+            data["work_mode"] = cfg1[0]
+            data["max_charging_current_raw"] = cfg1[1]
+            data["max_charging_power_raw"] = cfg1[2]
+            data["allowed_charge_time"] = cfg1[3]
+            data["allowed_charge_energy"] = cfg1[4]
+            data["time_validity"] = cfg1[5]
+            data["default_current_raw"] = cfg1[6]
+        else:
+            _LOGGER.warning("Could not read config registers 0x3000–0x3006")
+
+        # ── 0x300A–0x300B: R/W Config registers ─────────────────────────────
+        cfg2 = self.client.read_registers(0x300A, 2)
+        if cfg2 and len(cfg2) >= 2:
+            data["auto_phase_switch"] = cfg2[0]
+            data["min_switch_interval"] = cfg2[1]
+        else:
+            _LOGGER.warning("Could not read config registers 0x300A–0x300B")
 
         if not data:
             raise RuntimeError("FoxESS charger returned no readable register data")
